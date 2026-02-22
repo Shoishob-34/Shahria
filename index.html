@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoishob | Elite UI/UX Designer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg: #07070c;
+            --text: #fff;
+            --accent: #6c5cff;
+            --accent2: #00ffd5;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        #particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #07070c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loaderCanvas {
+            width: 400px;
+            height: 120px;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent), transparent);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, .3);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 65px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(108, 92, 255, 0.3));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 20px rgba(108, 92, 255, 0.6));
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #6c5cff, #00ffd5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            opacity: .8;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c5cff, #00ffd5);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(108, 92, 255, 0.4);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .glow-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+            display: inline-block;
+        }
+
+        section {
+            padding: 120px 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 28px;
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            transition: .4s;
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.03);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 40px rgba(108, 92, 255, .4);
+        }
+
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader"><canvas id="loaderCanvas"></canvas></div>
+    <div class="cursor"></div>
+    <canvas id="particles"></canvas>
+    <nav>
+        <div class="logo">
+            <img src="C:/Users/Safat Islam Saikat/.gemini/antigravity/brain/7e26dd70-4ab2-44ff-a8e4-cf3da88c8b7a/uploaded_media_1771736687437.png"
+                alt="Shoishob Logo">
+        </div>
+    </nav>
+    <div class="hero">
+        <h1>Shahria Islam Shoishob</h1>
+        <p>I design and develop premium, modern, animated websites that attract clients, increase conversions, and
+            elevate brands</p>
+        <div class="hero-btns">
+            <a href="https://wa.me/8801826503717" class="btn btn-primary">Hire Me</a>
+            <a href="https://www.fiverr.com/s/42yry5m" class="btn btn-primary">View Projects</a>
+        </div>
+    </div>
+    <section id="services">
+        <div class="section-title">Services</div>
+        <div class="grid">
+            <div class="card">
+                <h3 style="margin:0 0 10px 0; font-size:18px">Premium Portfolio Websites</h3>
+                <p style="font-size:14px; opacity:0.7; margin:0">Bespoke, high-end portfolios designed to showcase your
+                    work with elegance.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 10px 0; font-size:18px">Landing Pages that convert clients</h3>
+                <p style="font-size:14px; opacity:0.7; margin:0">Strategic layouts focused on driving user action and
+                    business growth.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 10px 0; font-size:18px">Modern UI/UX Design (Figma)</h3>
+                <p style="font-size:14px; opacity:0.7; margin:0">Pixel-perfect designs in Figma with a focus on
+                    usability and aesthetics.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 10px 0; font-size:18px">GSAP Animation Websites</h3>
+                <p style="font-size:14px; opacity:0.7; margin:0">Bringing your site to life with buttery-smooth,
+                    interactive GSAP animations.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 10px 0; font-size:18px">Frontend Development (React, Tailwind)</h3>
+                <p style="font-size:14px; opacity:0.7; margin:0">Scalable, responsive, and high-performance code using
+                    modern frameworks.</p>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 10px 0; font-size:18px">Interactive and 3D Websites</h3>
+                <p style="font-size:14px; opacity:0.7; margin:0">Immersive experiences featuring Three.js and complex
+                    interactions.</p>
+            </div>
+        </div>
+    </section>
+    <div class="section-title">Why Clients Choose Me</div>
+    <div class="grid">
+        <div class="card">
+            <h3 style="margin-top:0">Modern Premium Design</h3>
+            <p style="font-size:14px; opacity:0.7">Cutting-edge aesthetics that make your brand stand out from
+                the competition.</p>
+        </div>
+        <div class="card">
+            <h3 style="margin-top:0">Fast Delivery</h3>
+            <p style="font-size:14px; opacity:0.7">High-quality results delivered within tight deadlines without
+                compromising excellence.</p>
+        </div>
+        <div class="card">
+            <h3 style="margin-top:0">Client-focused Development</h3>
+            <p style="font-size:14px; opacity:0.7">Your goals are my priority. I build solutions tailored
+                specifically to your needs.</p>
+        </div>
+        <div class="card">
+            <h3 style="margin-top:0">Conversion-focused UI</h3>
+            <p style="font-size:14px; opacity:0.7">Designed strategically to turn visitors into loyal customers
+                and increase ROI.</p>
+        </div>
+    </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-title">Contact</div>
+        <div class="contact-info">
+            <div class="contact-item">
+                <span class="glow-dot"></span>
+                <span>Email: saisobb@gmail.com</span>
+            </div>
+            <div class="contact-item">
+                <span class="glow-dot"
+                    style="background:var(--accent2); box-shadow: 0 0 20px var(--accent2), 0 0 40px var(--accent2);"></span>
+                <span>WhatsApp: 01826503717</span>
+            </div>
+            <div class="contact-item">
+                <span class="glow-dot"
+                    style="background:#1877F2; box-shadow: 0 0 20px #1877F2, 0 0 40px #1877F2;"></span>
+                <span>Facebook: <a href="https://www.facebook.com/share/1JDaptRE7o/" target="_blank"
+                        style="color:inherit; text-decoration:none;">Shahria Islam Shoishob</a></span>
+            </div>
+        </div>
+        <div style="display:flex; justify-content:center;">
+            <a href="mailto:saisobb@gmail.com" class="btn btn-primary">Send Email</a>
+        </div>
+    </section>
+
+    <div class="whatsapp" onclick="window.open('https://wa.me/8801826503717')">WhatsApp</div>
+    <script>
+        const lc = document.getElementById("loaderCanvas");
+        const lctx = lc.getContext("2d");
+        lc.width = 400; lc.height = 120;
+        lctx.font = "bold 60px Inter"; lctx.fillText("SHOISHOB", 40, 80);
+        let data = lctx.getImageData(0, 0, 400, 120).data;
+        let lp = [];
+        for (let y = 0; y < 120; y += 3) { for (let x = 0; x < 400; x += 3) { let i = (y * 400 + x) * 4; if (data[i + 3] > 128) { lp.push({ x: Math.random() * 400, y: Math.random() * 120, tx: x, ty: y }); } } }
+        function loaderAnim() { lctx.clearRect(0, 0, 400, 120); lp.forEach(p => { p.x += (p.tx - p.x) * 0.08; p.y += (p.ty - p.y) * 0.08; lctx.fillStyle = "#6c5cff"; lctx.fillRect(p.x, p.y, 2, 2); }); requestAnimationFrame(loaderAnim); }
+        loaderAnim();
+        setTimeout(() => { document.getElementById("loader").remove(); }, 3000);
+        let mouse = { x: 0, y: 0 };
+        document.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        const canvas = document.getElementById("particles");
+        const ctx = canvas.getContext("2d");
+        canvas.width = innerWidth; canvas.height = innerHeight;
+        let particles = [];
+        for (let i = 0; i < 120; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, dx: (Math.random() - .5), dy: (Math.random() - .5), r: 2 }); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                let dx = mouse.x - p.x; let dy = mouse.y - p.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 200) { p.dx += dx * 0.0005; p.dy += dy * 0.0005; }
+                p.dx *= 0.98; p.dy *= 0.98; p.x += p.dx; p.y += p.dy;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = "#6c5cff"; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // GSAP Scroll Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate Sections
+        gsap.utils.toArray('section').forEach(section => {
+            gsap.from(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                ease: "power2.out"
+            });
+        });
+
+        // Animate Cards
+        gsap.utils.toArray('.card').forEach(card => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 30,
+                scale: 0.9,
+                duration: 0.8,
+                ease: "back.out(1.7)"
+            });
+        });
+
+        // Animate Hero Content
+        gsap.from(".hero h1, .hero p, .hero-btns", {
+            opacity: 0,
+            y: 60,
+            stagger: 0.2,
+            duration: 1.2,
+            ease: "power4.out",
+            delay: 3.2 // Wait for loader
+        });
+    </script>
+</body>
+
+</html>
